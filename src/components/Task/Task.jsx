@@ -16,7 +16,7 @@ export default class Task extends Component {
     });
   };
 
-  oKeyDown = (event, id) => {
+  pressKeyDown = (event, id) => {
     const { inputKeyDown, task } = this.props;
     const { value } = this.state;
     const { edit } = task;
@@ -43,7 +43,7 @@ export default class Task extends Component {
                 className="editInput"
                 onChange={this.onInputChange}
                 value={value}
-                onKeyDown={(event) => this.oKeyDown(event, id)}
+                onKeyDown={(event) => this.pressKeyDown(event, id)}
               />
             </label>
           ) : (
