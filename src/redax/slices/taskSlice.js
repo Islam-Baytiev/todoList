@@ -43,7 +43,7 @@ export const todoData = createSlice({
     // eslint-disable-next-line no-unused-vars
     clearAll: (state, action) => {
       // eslint-disable-next-line no-param-reassign
-      state.todos = [];
+      state.todos = state.todos.filter((todo) => !todo.completed);
     },
   },
 });
