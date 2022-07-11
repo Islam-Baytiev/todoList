@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 
-import { todoFilter, clearAll } from '../redax/slices/taskSlice';
+import { todoFilter, clearAll } from '../../redux/slices/taskSlice';
 
 const TaskFilter = () => {
   const filters = ['All', 'Completed', 'Active'];
@@ -20,6 +20,7 @@ const TaskFilter = () => {
           <li key={filter}>
             <button
               type="button"
+              aria-label={filter}
               className={flag === filter ? 'selected' : ''}
               onClick={(event) => onToogleFilter(event.target.textContent)}
             >
@@ -28,7 +29,7 @@ const TaskFilter = () => {
           </li>
         ))}
       </ul>
-      <button type="button" onClick={clearTask} className="clear-completed">
+      <button type="button" aria-label="clear-completed" onClick={clearTask} className="clear-completed">
         Clear completed
       </button>
     </>

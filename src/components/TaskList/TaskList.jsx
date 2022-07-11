@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import Task from './Task';
+import Task from '../Task/Task';
 
 const TaskList = () => {
   const todos = useSelector((state) => state.todoData.todos);

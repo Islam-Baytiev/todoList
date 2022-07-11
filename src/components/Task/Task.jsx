@@ -1,38 +1,27 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { formatDistanceToNow } from 'date-fns';
 
-import { todoCompleted, todoRemove, todoIsEditing, todoEdit } from '../redax/slices/taskSlice';
+import { todoCompleted, todoRemove, todoIsEditing, todoEdit } from '../../redux/slices/taskSlice';
 
-function useInterval(callback, delay) {
-  const savedCallback = useRef();
-
-  useEffect(() => {
-    savedCallback.current = callback;
-  }, [callback]);
-
-  // eslint-disable-next-line consistent-return
-  useEffect(() => {
-    function tick() {
-      savedCallback.current();
-    }
-    if (delay !== null) {
-      const id = setInterval(tick, delay);
-      return () => clearInterval(id);
-    }
-  }, [delay]);
-}
+const getPadTime = (time) => time.toString().padStart(2, '0');
 
 const Task = ({ title, id, timered, completed, isEditing, time }) => {
   const { min, sec } = timered;
-  const [timer, setTimer] = useState({ min, sec });
+  const newSec = Number(min * 60) + Number(sec);
+  const [timer, setTimer] = useState(newSec);
   const [isRunning, setIsRunning] = useState(false);
+  const minutes = getPadTime(Math.floor(timer / 60));
+  const seconds = getPadTime(timer - minutes * 60);
 
-  const stepping = (field) => {
-    let step = +timer[field] + 1;
-    step = step < 10 ? `0${step}` : step;
-    return step;
-  };
+  useEffect(() => {
+    const interval = setInterval(() => {
+      isRunning && setTimer((timer) => (timer >= 1 ? timer - 1 : 0));
+    }, 1000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [isRunning]);
 
   const onStartTimer = () => {
     setIsRunning(true);
@@ -42,18 +31,6 @@ const Task = ({ title, id, timered, completed, isEditing, time }) => {
     setIsRunning(false);
   };
 
-  useInterval(
-    () => {
-      if (timer.sec < 59) {
-        const seconds = stepping('sec');
-        setTimer({ ...timer, sec: seconds });
-      } else if (timer.min < 59) {
-        const minutes = stepping('min');
-        setTimer({ min: minutes, sec: '00' });
-      }
-    },
-    isRunning ? 1000 : null
-  );
   const [value, setValue] = useState(title);
   const dispatch = useDispatch();
 
@@ -103,7 +80,6 @@ const Task = ({ title, id, timered, completed, isEditing, time }) => {
                 }}
               />
               <label>
-                {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
                 <span
                   role="button"
                   tabIndex={0}
@@ -116,9 +92,21 @@ const Task = ({ title, id, timered, completed, isEditing, time }) => {
                   {title}
                 </span>
                 <span className="description">
-                  <button type="button" className="icon icon-play" onClick={onStartTimer} disabled={completed} />
-                  <button type="button" className="icon icon-pause" onClick={onPauseTimer} disabled={completed} />
-                  {`${timer.min}:${timer.sec}`}
+                  <button
+                    type="button"
+                    title="play"
+                    className="icon icon-play"
+                    onClick={onStartTimer}
+                    disabled={completed}
+                  />
+                  <button
+                    type="button"
+                    title="pause"
+                    className="icon icon-pause"
+                    onClick={onPauseTimer}
+                    disabled={completed}
+                  />
+                  {`${minutes}:${seconds}`}
                 </span>
                 <span className="description">
                   created
@@ -126,8 +114,8 @@ const Task = ({ title, id, timered, completed, isEditing, time }) => {
                   ago
                 </span>
               </label>
-              <button type="button" className="icon icon-edit" onClick={() => onToogleEditing(id)} />
-              <button type="button" onClick={() => onTaskRemove(id)} className="icon icon-destroy" />
+              <button type="button" title="edit" className="icon icon-edit" onClick={() => onToogleEditing(id)} />
+              <button type="button" title="destroy" onClick={() => onTaskRemove(id)} className="icon icon-destroy" />
             </>
           )}
         </div>

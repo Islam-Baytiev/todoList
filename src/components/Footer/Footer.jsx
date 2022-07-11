@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 
-import TaskFilter from './TaskFilter';
+import TaskFilter from '../TaskFilter/TaskFilter';
 
 const Footer = () => {
   const tasks = useSelector((state) => state.todoData.todos);

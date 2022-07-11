@@ -20,7 +20,6 @@ export const todoData = createSlice({
       });
     },
     todoRemove: (state, action) => {
-      // eslint-disable-next-line no-param-reassign
       state.todos = state.todos.filter((todo) => todo.id !== action.payload.id);
     },
     todoCompleted: (state, action) => {
@@ -37,12 +36,9 @@ export const todoData = createSlice({
       editTodo.title = action.payload.title;
     },
     todoFilter: (state, action) => {
-      // eslint-disable-next-line no-param-reassign
       state.flag = action.payload.text;
     },
-    // eslint-disable-next-line no-unused-vars
-    clearAll: (state, action) => {
-      // eslint-disable-next-line no-param-reassign
+    clearAll: (state) => {
       state.todos = state.todos.filter((todo) => !todo.completed);
     },
   },

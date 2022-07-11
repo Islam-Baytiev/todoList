@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { todoAdd } from '../redax/slices/taskSlice';
+import { todoAdd } from '../../redux/slices/taskSlice';
 
 const NewTaskForm = () => {
   const dispatch = useDispatch();
@@ -18,8 +18,8 @@ const NewTaskForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (title.trim()) {
-      const { min, sec } = time;
+    const { min, sec } = time;
+    if (title.trim() && min.trim() && sec.trim()) {
       dispatch(todoAdd({ title, min, sec }));
       setTitle('');
       setTime({ min: '', sec: '' });
@@ -35,8 +35,6 @@ const NewTaskForm = () => {
           onChange={(event) => setTitle(event.target.value)}
           className="new-todo"
           placeholder="Task"
-          /* eslint-disable-next-line jsx-a11y/no-autofocus */
-          autoFocus
         />
         <input className="new-todo-form__timer" placeholder="Min" value={time.min} name="min" onChange={onChangeTime} />
         <input className="new-todo-form__timer" placeholder="Sec" value={time.sec} name="sec" onChange={onChangeTime} />

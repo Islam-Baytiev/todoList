@@ -1,7 +1,7 @@
 import './App.scss';
-import NewTaskForm from './components/NewTaskForm';
-import TaskList from './components/TaskList';
-import Footer from './components/Footer';
+import NewTaskForm from './components/NewTaskForm/NewTaskForm';
+import TaskList from './components/TaskList/TaskList';
+import Footer from './components/Footer/Footer';
 
 function App() {
   return (
